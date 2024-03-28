@@ -14,7 +14,8 @@ async def ask(content: str):
     model="gpt-3.5-turbo",
     messages=[{"role": "user", "content": content}],
     stream=True,
-    temperature=0.3
+    temperature=0.3,
+    max_tokens=10240
   )
   async for chunk in stream:
     print(chunk.choices[0].delta.content or "", end="")
