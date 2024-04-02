@@ -8,8 +8,11 @@ client = AsyncOpenAI(
   api_key='free',
 )
 
-async def ask(content: str):
-  print(client.base_url)
+async def ask(content: str, auto_print=True):
+  """
+  auto_print: 是否自动打印回答
+  """
+  # print(client.base_url)
   stream = await client.chat.completions.create(
     model="anything",
     messages=[{"role": "user", "content": content}],
@@ -17,5 +20,11 @@ async def ask(content: str):
     temperature=0.3,
     max_tokens=10240
   )
+  res = ''
   async for chunk in stream:
-    print(chunk.choices[0].delta.content or "", end="")
+    content = chunk.choices[0].delta.content or ""
+    if auto_print:
+      print(content, end="")
+    res += content
+
+  return res
